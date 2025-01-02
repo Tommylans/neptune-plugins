@@ -39,15 +39,17 @@ export class MediaItemCache {
 		if (this._cache[itemId] === undefined) {
 			const currentPage = window.location.pathname;
 
-			const loadedTrack = await interceptPromise(() => neptune.actions.router.replace(<any>`/track/${itemId}`), ["page/IS_DONE_LOADING"], [])
+			//const loadedTrack =
+			await interceptPromise(() => neptune.actions.router.replace(<any>`/track/${itemId}`), ["page/IS_DONE_LOADING"], [])
 				.then(() => true)
 				.catch(libTrace.warn.withContext(`TrackItemCache.ensure failed to load track ${itemId}`));
 			// If we fail to load the track, maybe its a video, try that instead as a last ditch attempt
-			if (!loadedTrack) {
-				await interceptPromise(() => neptune.actions.router.replace(<any>`/video/${itemId}`), ["page/IS_DONE_LOADING"], []).catch(
-					libTrace.warn.withContext(`TrackItemCache.ensure failed to load video ${itemId}`)
-				);
-			}
+			// TODO: There is never a video for me and the error is a bit annoying
+			// if (!loadedTrack) {
+			// 	await interceptPromise(() => neptune.actions.router.replace(<any>`/video/${itemId}`), ["page/IS_DONE_LOADING"], []).catch(
+			// 		libTrace.warn.withContext(`TrackItemCache.ensure failed to load video ${itemId}`)
+			// 	);
+			// }
 			neptune.actions.router.replace(<any>currentPage);
 
 			const mediaItems: Record<number, TidalMediaItem> = store.getState().content.mediaItems;
