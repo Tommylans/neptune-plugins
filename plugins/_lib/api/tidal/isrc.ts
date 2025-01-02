@@ -8,7 +8,9 @@ type ISRCOptions = {
 };
 export const fetchIsrc = async (isrc: string, options?: ISRCOptions) => {
 	const { limit, offset } = options ?? { limit: 100, offset: 0 };
-	return requestJsonCached<ISRCResponse>(`https://openapi.tidal.com/tracks/byIsrc?isrc=${isrc}&countryCode=US&limit=${limit}&offset=${offset}`, {
+
+	// TODO: Not really sure what the countryCode does but lets try it.
+	return requestJsonCached<ISRCResponse>(`https://openapi.tidal.com/tracks/byIsrc?isrc=${isrc}&countryCode=NL&limit=${limit}&offset=${offset}`, {
 		headers: {
 			Authorization: `Bearer ${await getToken()}`,
 			"Content-Type": "application/vnd.tidal.v1+json",
