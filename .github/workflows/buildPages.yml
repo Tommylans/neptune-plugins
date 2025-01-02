@@ -1,6 +1,6 @@
 name: Build and deploy
 
-on: [workflow_dispatch]
+on: [workflow_dispatch, push]
 
 permissions:
   contents: read
