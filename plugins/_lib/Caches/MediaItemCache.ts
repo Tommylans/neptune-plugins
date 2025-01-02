@@ -39,7 +39,7 @@ export class MediaItemCache {
 		if (this._cache[itemId] === undefined) {
 			const currentPage = window.location.pathname;
 			
-			const successfullyLoadedTrack = await interceptPromise(() => neptune.actions.router.replace(<any>`/track/${itemId}`), ["page/IS_DONE_LOADING"], [])
+			const successfullyLoadedTrack = await interceptPromise(() => neptune.actions.router.push(<any>`/track/${itemId}`), ["page/IS_DONE_LOADING"], [])
 				.then(() => true)
 				.catch(libTrace.warn.withContext(`TrackItemCache.ensure failed to load track ${itemId}`));
 			// If we fail to load the track, maybe its a video, try that instead as a last ditch attempt
