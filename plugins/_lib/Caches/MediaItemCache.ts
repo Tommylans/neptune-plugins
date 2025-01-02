@@ -57,9 +57,9 @@ export class MediaItemCache {
 
 			// When the load didn't succeed (not really sure if it is fast enough) then we just do a replace
 			// FIXME: I think it's too fast
-			// if (window.location.pathname !== currentPage) {
-			// 	neptune.actions.router.replace(<any>currentPage);
-			// }
+			if (window.location.pathname !== currentPage) {
+				neptune.actions.router.replace(<any>currentPage);
+			}
 
 			const mediaItems: Record<number, TidalMediaItem> = store.getState().content.mediaItems;
 			const trackItem = mediaItems[+itemId]?.item;
