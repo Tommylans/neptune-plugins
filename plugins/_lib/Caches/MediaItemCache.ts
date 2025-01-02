@@ -38,9 +38,8 @@ export class MediaItemCache {
 
 		if (this._cache[itemId] === undefined) {
 			const currentPage = window.location.pathname;
-
-			//const loadedTrack =
-			await interceptPromise(() => neptune.actions.router.replace(<any>`/track/${itemId}`), ["page/IS_DONE_LOADING"], [])
+			
+			const successfullyLoadedTrack = await interceptPromise(() => neptune.actions.router.replace(<any>`/track/${itemId}`), ["page/IS_DONE_LOADING"], [])
 				.then(() => true)
 				.catch(libTrace.warn.withContext(`TrackItemCache.ensure failed to load track ${itemId}`));
 			// If we fail to load the track, maybe its a video, try that instead as a last ditch attempt
@@ -50,7 +49,16 @@ export class MediaItemCache {
 			// 		libTrace.warn.withContext(`TrackItemCache.ensure failed to load video ${itemId}`)
 			// 	);
 			// }
-			neptune.actions.router.replace(<any>currentPage);
+
+			// We just navigate back to the pevious page so the scroll is restored
+			if (successfullyLoadedTrack) {
+				neptune.actions.routerGoBack();
+			}
+
+			// When the load didn't succeed (not really sure if it is fast enough) then we just do a replace
+			if (window.location.pathname !== currentPage) {
+				neptune.actions.router.replace(<any>currentPage);
+			}
 
 			const mediaItems: Record<number, TidalMediaItem> = store.getState().content.mediaItems;
 			const trackItem = mediaItems[+itemId]?.item;
